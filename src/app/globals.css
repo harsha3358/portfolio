@@ -125,7 +125,7 @@ body.laptop-intro-active header {
 }
 
 .typing-cursor {
-  color: var(--accent-soft);
+  color: #7b2d3a;
   animation: blink-cursor 0.9s steps(1) infinite;
 }
 
@@ -173,4 +173,80 @@ body.laptop-intro-active header {
   40% {
     opacity: 1;
   }
+}
+
+.compile-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: #eef3e6;
+  background: linear-gradient(180deg, #5f7a2f, #45591f);
+  border: 1px solid #3a4a19;
+  border-radius: 5px;
+  padding: 5px 12px;
+  cursor: pointer;
+  box-shadow: 0 0 0 rgba(122, 158, 60, 0);
+  animation: compile-glow 2s ease-in-out infinite;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.compile-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.compile-btn:active {
+  transform: translateY(0px) scale(0.97);
+}
+
+@keyframes compile-glow {
+  0%, 100% {
+    box-shadow: 0 0 4px 0 rgba(122, 158, 60, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 12px 2px rgba(122, 158, 60, 0.85);
+  }
+}
+
+.spinner-ring-dark {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid rgba(74, 64, 48, 0.18);
+  border-top-color: #7b2d3a;
+  animation: spin-ring 0.8s linear infinite;
+}
+
+.terminal-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(74, 64, 48, 0.4) transparent;
+}
+
+.terminal-scroll::-webkit-scrollbar {
+  width: 9px;
+}
+
+.terminal-scroll::-webkit-scrollbar-track {
+  background: rgba(74, 64, 48, 0.08);
+}
+
+.terminal-scroll::-webkit-scrollbar-thumb {
+  background: rgba(74, 64, 48, 0.4);
+  border-radius: 999px;
+  border: 2px solid transparent;
+}
+
+.terminal-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(74, 64, 48, 0.6);
+}
+
+.mac-chrome-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
 }

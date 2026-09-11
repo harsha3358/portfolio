@@ -6,6 +6,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { ContactShadows, Html, PerspectiveCamera } from "@react-three/drei";
 import { damp, easeOutCubic, mapRange, smoothstep } from "@/lib/laptopMath";
 import { personal } from "@/lib/data";
+import { CODE_BG, CODE_BG_HEADER, CODE_COLORS } from "@/lib/codeHighlight";
 
 const BASE_WIDTH = 2.6;
 const BASE_HEIGHT = 0.09;
@@ -204,37 +205,63 @@ export default function LaptopScene({
                 ref={identityRef}
                 style={{
                   opacity: 0,
-                  width: "460px",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "14px",
+                  width: "440px",
+                  borderRadius: "14px",
+                  overflow: "hidden",
                   fontFamily: "var(--font-sans, sans-serif)",
-                  color: "#111111",
-                  textAlign: "center",
+                  boxShadow: "0 30px 60px -20px rgba(0,0,0,0.5)",
+                  background: CODE_BG,
                 }}
               >
                 <div
                   style={{
-                    width: "88px",
-                    height: "88px",
-                    borderRadius: "50%",
-                    background: "linear-gradient(135deg, #cf9a52, #8a5f2b)",
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "42px",
-                    lineHeight: 1,
-                    boxShadow: "0 0 40px rgba(207,154,82,0.45)",
+                    gap: "8px",
+                    padding: "10px 14px",
+                    background: CODE_BG_HEADER,
                   }}
                 >
-                  🙂
+                  <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#ff5f57" }} />
+                  <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#febc2e" }} />
+                  <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#28c840" }} />
+                  <span style={{ marginLeft: 6, fontSize: "11px", color: CODE_COLORS.punct, fontFamily: "var(--font-mono, monospace)" }}>
+                    harsha3358 — whoami
+                  </span>
                 </div>
-                <div style={{ fontSize: "26px", fontWeight: 600, letterSpacing: "0.5px" }}>
-                  {personal.displayName}
-                </div>
-                <div style={{ fontSize: "14px", color: "#3a3a3a", letterSpacing: "0.5px" }}>
-                  {personal.role}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "14px",
+                    color: "#111111",
+                    textAlign: "center",
+                    padding: "32px 24px",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "88px",
+                      height: "88px",
+                      borderRadius: "50%",
+                      background: "linear-gradient(135deg, #cf9a52, #8a5f2b)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "42px",
+                      lineHeight: 1,
+                      boxShadow: "0 0 40px rgba(207,154,82,0.45)",
+                    }}
+                  >
+                    🙂
+                  </div>
+                  <div style={{ fontSize: "26px", fontWeight: 600, letterSpacing: "0.5px" }}>
+                    {personal.displayName}
+                  </div>
+                  <div style={{ fontSize: "14px", color: "#3a3a3a", letterSpacing: "0.5px" }}>
+                    {personal.role}
+                  </div>
                 </div>
               </div>
             </Html>

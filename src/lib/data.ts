@@ -38,7 +38,25 @@ export const profileCode = `class HarshavardhanaReddy:
             "tools": ["Power BI", "Pandas", "Matplotlib", "GitHub Actions"]
         }`;
 
-export const profileOutput = `>>> me = HarshavardhanaReddy()
+export const profileOutput = `$ python3 harsha.py
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  H A R S H A . P Y   —   v2.0-stable*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  * stable is a strong word, we're all learning here
+
+Booting personality module............... OK
+Loading caffeine.dll...................... OK
+Importing sarcasm as sass................. OK
+Compiling neural pathways................. 100%
+Checking for bugs.......................... found 0 (that we know of)
+Checking for sleep.......................... not found
+Checking for imposter syndrome.............. found 1 (industry standard)
+Googling "how to center a div".............. 1,204,000 results, still unsure
+
+>>> me = HarshavardhanaReddy()
+>>> me.status
+"awake, caffeinated, dangerously curious"
+
 >>> me.current_focus()
 {
     "learning": ["Generative AI", "Advanced Data Visualization", "Flutter"],
@@ -46,6 +64,7 @@ export const profileOutput = `>>> me = HarshavardhanaReddy()
     "collaborating": "Open to innovative AI/Data projects",
     "fun_fact": "I automate everything... except my coffee breaks ☕"
 }
+
 >>> me.tech_stack()
 {
     "languages": ["Python", "Java", "Dart", "SQL"],
@@ -54,14 +73,28 @@ export const profileOutput = `>>> me = HarshavardhanaReddy()
     "databases": ["MySQL", "Supabase"],
     "cloud": ["Azure", "AWS"],
     "tools": ["Power BI", "Pandas", "Matplotlib", "GitHub Actions"]
-}`;
+}
 
-export const profileForHumans = [
-  "I'm Harshavardhan Reddy — online as harsha3358 — an AI Engineer, Data Specialist, and UI Developer from India.",
-  "Studying Computer Science (AI & Data Engineering) at Lovely Professional University, with certifications in Azure Data Fundamentals and Software Engineering.",
-  "Right now: learning Generative AI, advanced data visualization, and Flutter — while building Truxlo (a logistics platform), AI tools for hospitals, and interactive dashboards.",
-  "Open to interesting AI or data collaborations. And yes — I automate almost everything, except my coffee breaks ☕",
-];
+>>> me.take_a_day_off()
+Traceback (most recent call last):
+  File "harsha.py", line 404, in <module>
+    me.take_a_day_off()
+NotImplementedError: feature not shipped yet, still in backlog
+
+>>> me.debug_life()
+Warning: stack overflow (mentally, not technically)
+Retrying with more coffee................. OK
+
+>>> me.hire_me()
+True
+>>> me.hire_me(regret=True)
+True  # still True, no takebacks
+
+>>> print("you scrolled this far AND clicked compile — cookie 🍪 has been mentally sent")
+you scrolled this far AND clicked compile — cookie 🍪 has been mentally sent
+
+Process finished with exit code 0 (and zero regrets, mostly)
+>>> _`;
 
 export const skills = [
   {

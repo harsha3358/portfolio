@@ -22,6 +22,14 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    console.log(
+      "%cOh hey, a fellow console dweller. 👀\n%cYou found the secret dev easter egg. There's no prize, just my respect.",
+      "font-size:14px; font-weight:bold; color:#cf9a52;",
+      "font-size:12px; color:#9a9aa3;"
+    );
+  }, []);
+
   return (
     <motion.header
       initial={{ y: -40, opacity: 0 }}

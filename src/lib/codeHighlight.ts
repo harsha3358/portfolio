@@ -1,10 +1,13 @@
 export const CODE_COLORS = {
-  keyword: "#7aa2f7",
-  string: "#e8c893",
-  func: "#7ee787",
-  default: "#c9c9ce",
-  punct: "#8f8f99",
+  keyword: "#7b2d3a",
+  string: "#5f6b1f",
+  func: "#2f4a6b",
+  default: "#4a4030",
+  punct: "#8a7a5c",
 };
+
+export const CODE_BG = "#ece3cc";
+export const CODE_BG_HEADER = "#ddd0ac";
 
 const KEYWORDS = new Set(["class", "def", "self", "return"]);
 const FUNC_CONTEXT = new Set(["class", "def"]);

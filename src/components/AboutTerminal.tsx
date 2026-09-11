@@ -1,203 +1,195 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { mapRange, smoothstep } from "@/lib/laptopMath";
-import { buildTypedHTML, tokenizeSource, totalChars } from "@/lib/codeHighlight";
-import { profileCode, profileForHumans, profileOutput } from "@/lib/data";
+import { buildTypedHTML, CODE_BG, CODE_BG_HEADER, CODE_COLORS, tokenizeSource, totalChars } from "@/lib/codeHighlight";
+import { profileCode, profileOutput } from "@/lib/data";
 
-function Dots({ className }: { className?: string }) {
-  return (
-    <span className={className}>
-      Running python3 harsha.py
-      <span className="loading-dots">
-        <span>.</span>
-        <span>.</span>
-        <span>.</span>
-      </span>
-    </span>
-  );
-}
+type Phase = "heading" | "typing" | "ready" | "compiling" | "output";
+
+// Cinematic self-typing pace, kept under a ~150 lines/min ceiling.
+const CHARS_PER_SEC = 60;
 
 export default function AboutTerminal() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const terminalWrapRef = useRef<HTMLDivElement>(null);
-  const codePaneRef = useRef<HTMLDivElement>(null);
   const codeInnerRef = useRef<HTMLDivElement>(null);
-  const outputPaneRef = useRef<HTMLDivElement>(null);
-  const loadingRef = useRef<HTMLDivElement>(null);
-  const outputContentRef = useRef<HTMLDivElement>(null);
+  const rafId = useRef<number | null>(null);
+  const initialReducedMotion =
+    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const initialPhase: Phase = initialReducedMotion ? "ready" : "heading";
+  const phaseRef = useRef<Phase>(initialPhase);
+  const [phase, setPhase] = useState<Phase>(initialPhase);
 
   const codeLines = useMemo(() => tokenizeSource(profileCode), []);
   const codeTotal = useMemo(() => totalChars(codeLines), [codeLines]);
   const outputLines = useMemo(() => tokenizeSource(profileOutput), []);
 
+  const goTo = (p: Phase) => {
+    phaseRef.current = p;
+    setPhase(p);
+  };
+
   useEffect(() => {
-    const rmQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (rmQuery.matches) return;
+    if (initialReducedMotion) {
+      if (codeInnerRef.current) {
+        codeInnerRef.current.innerHTML = buildTypedHTML(codeLines, codeTotal, false);
+      }
+      return;
+    }
+
     if (!sectionRef.current) return;
 
     gsap.registerPlugin(ScrollTrigger);
 
-    if (codeInnerRef.current) {
-      codeInnerRef.current.innerHTML = buildTypedHTML(codeLines, 0, false);
-    }
+    let typingStarted = false;
 
+    const startTyping = () => {
+      typingStarted = true;
+      goTo("typing");
+      const start = performance.now();
+      const tick = (now: number) => {
+        const elapsed = (now - start) / 1000;
+        const visible = Math.min(codeTotal, Math.floor(elapsed * CHARS_PER_SEC));
+        if (codeInnerRef.current) {
+          codeInnerRef.current.innerHTML = buildTypedHTML(codeLines, visible, visible < codeTotal);
+        }
+        if (visible >= codeTotal) {
+          goTo("ready");
+          return;
+        }
+        rafId.current = requestAnimationFrame(tick);
+      };
+      rafId.current = requestAnimationFrame(tick);
+    };
+
+    // A normal scrollable section — no scroll-locking. Scrolling through it
+    // at a normal pace lets the typing beat play out; scrolling straight
+    // through moves on to the next section like any other.
     const trigger = ScrollTrigger.create({
       trigger: sectionRef.current,
       start: "top top",
       end: "bottom bottom",
-      scrub: 0.3,
       onUpdate: (self) => {
-        const p = self.progress;
-
-        const headingOpacity = smoothstep(0, 0.03, p) - smoothstep(0.08, 0.12, p);
-        if (headingRef.current) {
-          headingRef.current.style.opacity = String(Math.max(0, headingOpacity));
+        if (!typingStarted && self.progress > 0.12) {
+          startTyping();
         }
-
-        const terminalOpacity = smoothstep(0.1, 0.16, p) * (1 - smoothstep(0.92, 1, p));
-        const terminalScale = mapRange(smoothstep(0.1, 0.16, p), 0, 1, 0.94, 1);
-        if (terminalWrapRef.current) {
-          terminalWrapRef.current.style.opacity = String(terminalOpacity);
-          terminalWrapRef.current.style.transform = `scale(${terminalScale}) translateY(${(1 - smoothstep(0.92, 1, p)) < 1 ? -smoothstep(0.94, 1, p) * 30 : 0}px)`;
-        }
-
-        const typeProgress = smoothstep(0.16, 0.56, p);
-        const visibleChars = Math.round(typeProgress * codeTotal);
-        const typingActive = typeProgress > 0 && typeProgress < 1;
-        if (codeInnerRef.current) {
-          codeInnerRef.current.innerHTML = buildTypedHTML(codeLines, visibleChars, typingActive);
-        }
-
-        const splitT = smoothstep(0.56, 0.62, p);
-        if (codePaneRef.current) {
-          codePaneRef.current.style.flexBasis = `${mapRange(splitT, 0, 1, 100, 50)}%`;
-        }
-        if (outputPaneRef.current) {
-          outputPaneRef.current.style.flexBasis = `${mapRange(splitT, 0, 1, 0, 50)}%`;
-          outputPaneRef.current.style.opacity = String(splitT);
-        }
-
-        const loadingOpacity = smoothstep(0.6, 0.65, p) * (1 - smoothstep(0.68, 0.72, p));
-        if (loadingRef.current) {
-          loadingRef.current.style.opacity = String(loadingOpacity);
-        }
-
-        const outputOpacity = smoothstep(0.72, 0.82, p);
-        if (outputContentRef.current) {
-          outputContentRef.current.style.opacity = String(outputOpacity);
-          outputContentRef.current.style.transform = `translateY(${(1 - outputOpacity) * 16}px)`;
-        }
+      },
+      onLeaveBack: () => {
+        if (rafId.current) cancelAnimationFrame(rafId.current);
+        typingStarted = false;
+        goTo("heading");
       },
     });
 
     return () => {
       trigger.kill();
+      if (rafId.current) cancelAnimationFrame(rafId.current);
     };
-  }, [codeLines, codeTotal]);
+  }, [codeLines, codeTotal, initialReducedMotion]);
+
+  const handleCompile = () => {
+    if (phase !== "ready") return;
+    goTo("compiling");
+    const delay = 500 + Math.random() * 500;
+    setTimeout(() => {
+      goTo("output");
+    }, delay);
+  };
+
+  const terminalVisible = phase !== "heading";
 
   return (
-    <section ref={sectionRef} id="about" className="relative h-[430vh] md:h-[460vh]">
-      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden bg-background">
+    <section
+      ref={sectionRef}
+      id="about"
+      className="relative h-[220vh] md:h-[240vh]"
+    >
+      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden bg-background px-4">
         <div
-          ref={headingRef}
-          className="absolute inset-0 flex flex-col items-center justify-center text-center px-6"
-          style={{ opacity: 0 }}
+          className={`absolute inset-0 flex items-center justify-center px-6 transition-opacity duration-500 ${
+            phase === "heading" ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
         >
-          <p className="font-serif-accent italic text-accent text-lg md:text-xl mb-4">
-            Who I am
-          </p>
-          <h2 className="font-display font-medium tracking-tight text-4xl md:text-6xl">
+          <h2 className="font-display font-medium tracking-tight text-4xl md:text-6xl text-center">
             know me here <span className="text-accent">:)</span>
           </h2>
         </div>
 
         <div
-          ref={terminalWrapRef}
-          className="container-cinematic w-full max-w-5xl px-4"
-          style={{ opacity: 0, transform: "scale(0.94)" }}
+          className={`w-full max-w-3xl transition-all duration-700 ease-out ${
+            terminalVisible ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+          }`}
         >
-          <div className="flex gap-4 md:gap-5 items-stretch">
+          <div
+            className="rounded-xl border border-black/10 overflow-hidden"
+            style={{ background: CODE_BG, boxShadow: "0 30px 60px -20px rgba(0,0,0,0.55)" }}
+          >
             <div
-              ref={codePaneRef}
-              className="rounded-xl border border-border bg-surface overflow-hidden flex flex-col"
-              style={{ flexBasis: "100%", minWidth: 0 }}
+              className="flex items-center justify-between px-4 py-2.5"
+              style={{ background: CODE_BG_HEADER }}
             >
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-surface-2/60">
+              <div className="flex items-center gap-2">
                 <span className="size-2.5 rounded-full bg-[#ff5f57]" />
                 <span className="size-2.5 rounded-full bg-[#febc2e]" />
                 <span className="size-2.5 rounded-full bg-[#28c840]" />
-                <span className="ml-2 text-xs text-muted font-mono">harsha.py</span>
+                <span className="ml-2 text-[11px] font-mono" style={{ color: CODE_COLORS.punct }}>
+                  harsha.py
+                </span>
               </div>
-              <div
-                ref={codeInnerRef}
-                className="font-mono text-[11px] md:text-[13px] leading-[1.65] p-4 md:p-5 overflow-x-auto"
-                style={{ whiteSpace: "pre" }}
-              />
+              {phase === "ready" && (
+                <button onClick={handleCompile} className="compile-btn">
+                  ▶ Compile
+                </button>
+              )}
             </div>
 
-            <div
-              ref={outputPaneRef}
-              className="rounded-xl border border-border bg-surface overflow-hidden flex flex-col relative"
-              style={{ flexBasis: "0%", opacity: 0, minWidth: 0 }}
-            >
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-surface-2/60">
-                <span className="size-2.5 rounded-full bg-[#ff5f57]" />
-                <span className="size-2.5 rounded-full bg-[#febc2e]" />
-                <span className="size-2.5 rounded-full bg-[#28c840]" />
-                <span className="ml-2 text-xs text-muted font-mono">output</span>
-              </div>
-
-              <div className="relative flex-1 p-4 md:p-5 overflow-y-auto">
+            <div className="relative" style={{ height: "min(64vh, 620px)" }}>
+              {phase !== "output" && (
                 <div
-                  ref={loadingRef}
-                  className="absolute inset-0 flex items-center justify-center px-6"
-                  style={{ opacity: 0 }}
+                  ref={codeInnerRef}
+                  data-lenis-prevent
+                  className="terminal-scroll font-mono text-[12px] md:text-[13.5px] leading-[1.65] p-5 md:p-6 h-full overflow-y-auto"
+                  style={{ whiteSpace: "pre" }}
+                />
+              )}
+
+              {phase === "compiling" && (
+                <div
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-4 font-mono text-[13px]"
+                  style={{ background: CODE_BG, color: CODE_COLORS.default }}
                 >
-                  <div className="flex flex-col items-center gap-4">
-                    <span className="spinner-ring" />
-                    <Dots className="font-mono text-xs text-muted whitespace-nowrap" />
+                  <div>
+                    <span style={{ color: CODE_COLORS.punct }}>$ </span>
+                    python3 harsha.py
+                  </div>
+                  <span className="spinner-ring-dark" />
+                  <div style={{ color: CODE_COLORS.punct }} className="text-[11px]">
+                    compiling vibes, please hold...
                   </div>
                 </div>
+              )}
 
-                <div ref={outputContentRef} style={{ opacity: 0 }}>
-                  <pre className="font-mono text-[10px] md:text-[12px] leading-[1.6] whitespace-pre-wrap">
-                    {outputLines.map((line, i) => (
-                      <div key={i}>
-                        {line.length === 0 ? (
-                          <>&nbsp;</>
-                        ) : (
-                          line.map((t, j) => (
-                            <span key={j} style={{ color: t.color }}>
-                              {t.text}
-                            </span>
-                          ))
-                        )}
-                      </div>
-                    ))}
-                  </pre>
-
-                  <div className="mt-5 pt-4 border-t border-border">
-                    <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-accent mb-3">
-                      In plain English
-                    </p>
-                    <ul className="flex flex-col gap-2">
-                      {profileForHumans.map((line) => (
-                        <li
-                          key={line}
-                          className="text-[11px] md:text-sm text-foreground/85 leading-relaxed flex gap-2"
-                        >
-                          <span className="text-accent">—</span>
-                          <span>{line}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
+              {phase === "output" && (
+                <pre
+                  data-lenis-prevent
+                  className="terminal-scroll font-mono text-[12px] md:text-[13.5px] leading-[1.65] whitespace-pre-wrap p-5 md:p-6 h-full overflow-y-auto m-0"
+                >
+                  {outputLines.map((line, i) => (
+                    <div key={i}>
+                      {line.length === 0 ? (
+                        <>&nbsp;</>
+                      ) : (
+                        line.map((t, j) => (
+                          <span key={j} style={{ color: t.color }}>
+                            {t.text}
+                          </span>
+                        ))
+                      )}
+                    </div>
+                  ))}
+                </pre>
+              )}
             </div>
           </div>
         </div>
