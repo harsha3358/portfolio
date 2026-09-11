@@ -2,6 +2,8 @@
 
 A cinematic 3D Next.js portfolio website featuring an interactive 3D laptop intro, self-typing terminal bio, smooth scroll animations, and dark glassmorphic styling.
 
+**Live:** [https://harsha-reddy.vercel.app/](https://harsha-reddy.vercel.app/)
+
 ## Getting Started
 
 First, run the development server:

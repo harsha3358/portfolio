@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type WheelEvent } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { buildTypedHTML, CODE_BG, CODE_BG_HEADER, CODE_COLORS, tokenizeSource, totalChars } from "@/lib/codeHighlight";
@@ -88,6 +88,24 @@ export default function AboutTerminal() {
     };
   }, [codeLines, codeTotal, initialReducedMotion]);
 
+  const handleInnerWheel = (e: WheelEvent<HTMLElement>) => {
+    const el = e.currentTarget;
+    const atTop = el.scrollTop <= 0;
+    const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+    const scrollingUp = e.deltaY < 0;
+    const scrollingDown = e.deltaY > 0;
+
+    if ((atTop && scrollingUp) || (atBottom && scrollingDown)) {
+      // Let it fall through to the page scroll once the inner content
+      // has nowhere left to go.
+      return;
+    }
+
+    e.stopPropagation();
+    e.preventDefault();
+    el.scrollTop += e.deltaY;
+  };
+
   const handleCompile = () => {
     if (phase !== "ready") return;
     goTo("compiling");
@@ -149,6 +167,7 @@ export default function AboutTerminal() {
                 <div
                   ref={codeInnerRef}
                   data-lenis-prevent
+                  onWheel={handleInnerWheel}
                   className="terminal-scroll font-mono text-[12px] md:text-[13.5px] leading-[1.65] p-5 md:p-6 h-full overflow-y-auto"
                   style={{ whiteSpace: "pre" }}
                 />
@@ -173,6 +192,7 @@ export default function AboutTerminal() {
               {phase === "output" && (
                 <pre
                   data-lenis-prevent
+                  onWheel={handleInnerWheel}
                   className="terminal-scroll font-mono text-[12px] md:text-[13.5px] leading-[1.65] whitespace-pre-wrap p-5 md:p-6 h-full overflow-y-auto m-0"
                 >
                   {outputLines.map((line, i) => (
