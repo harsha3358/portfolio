@@ -150,6 +150,10 @@ export const experience = [
   },
 ];
 
+function siteShot(url: string) {
+  return `https://image.thum.io/get/width/1200/crop/800/${url}`;
+}
+
 export const projects = [
   {
     title: "Truxlo — AI Logistics Platform",
@@ -162,9 +166,10 @@ export const projects = [
       "Developed REST APIs and backend services for load matching, route allocation, and logistics automation.",
       "Shipped secure live GPS tracking with encrypted data and interactive fleet dashboards, improving fleet management efficiency by 40%.",
     ],
-    link: "https://github.com/harsha3358",
+    link: "https://truxlo.vercel.app/",
     repo: null,
-    domain: "truxlo.app",
+    image: siteShot("https://truxlo.vercel.app/"),
+    domain: "truxlo.vercel.app",
   },
   {
     title: "Medical Report Summarization & Clinical NER",
@@ -179,6 +184,7 @@ export const projects = [
     ],
     link: "https://github.com/harsha3358/Medical_Report_Summarizer_with_Clinical_NER",
     repo: "harsha3358/Medical_Report_Summarizer_with_Clinical_NER",
+    image: null,
     domain: "github.com/harsha3358/Medical_Report_Summarizer_with_Clinical_NER",
   },
   {
@@ -193,6 +199,7 @@ export const projects = [
     ],
     link: "https://github.com/harsha3358/Hospital_gen_ai",
     repo: "harsha3358/Hospital_gen_ai",
+    image: null,
     domain: "github.com/harsha3358/Hospital_gen_ai",
   },
   {
@@ -207,6 +214,7 @@ export const projects = [
     ],
     link: "https://github.com/harsha3358/Aura",
     repo: "harsha3358/Aura",
+    image: "https://raw.githubusercontent.com/harsha3358/Aura/main/Screenshots/Dashboard.png",
     domain: "github.com/harsha3358/Aura",
   },
   {
@@ -222,6 +230,7 @@ export const projects = [
     ],
     link: "https://github.com/harsha3358",
     repo: null,
+    image: null,
     domain: "brain-mri.local",
   },
   {
@@ -233,9 +242,10 @@ export const projects = [
     points: [
       "Built a scoring pipeline that turns a prompt and rubric into structured feedback and insights.",
     ],
-    link: "https://github.com/harsha3358/autorubric_aii",
+    link: "https://autorubricaii.vercel.app/",
     repo: "harsha3358/autorubric_aii",
-    domain: "github.com/harsha3358/autorubric_aii",
+    image: siteShot("https://autorubricaii.vercel.app/"),
+    domain: "autorubricaii.vercel.app",
   },
   {
     title: "Image/Video Generation Pipeline",
@@ -248,7 +258,39 @@ export const projects = [
     ],
     link: "https://github.com/harsha3358/Image-Video-generation-",
     repo: "harsha3358/Image-Video-generation-",
+    image: null,
     domain: "github.com/harsha3358/Image-Video-generation-",
+  },
+  {
+    title: "AI Weekly Monitor",
+    period: "2026",
+    tags: ["Gemini AI", "Puppeteer", "GitHub Actions", "Web Scraping"],
+    description:
+      "A fully automated, zero-cost tool that tracks new AI tool releases every week, categorizes them with Gemini, and publishes a living archive site.",
+    points: [
+      "Scrapes 25+ AI RSS feeds and newsletters weekly, then uses Gemini 2.0 Flash to categorize releases into coding/agents, video/media, and research buckets.",
+      "Auto-generates a dark-mode archive website with every week's run permanently saved to the report history.",
+      "Posts a Gen Z-friendly weekly summary straight to LinkedIn using headless Chromium, running entirely on free-tier GitHub Actions.",
+    ],
+    link: "https://ai-weekly-monitor.vercel.app/",
+    repo: "harsha3358/ai-weekly-monitor",
+    image: siteShot("https://ai-weekly-monitor.vercel.app/"),
+    domain: "ai-weekly-monitor.vercel.app",
+  },
+  {
+    title: "Telangana Borewells — KHB",
+    period: "2026",
+    tags: ["Next.js", "Web Design", "Business Site"],
+    description:
+      "A marketing and service site for a borewell drilling company operating across Telangana — services, machinery, project showcase, and coverage areas.",
+    points: [
+      "Built out services, machinery, service-area, and project-showcase pages for a real local business.",
+      "Designed a clean, dark-toned marketing site with clear calls to action for inbound leads.",
+    ],
+    link: "https://telanganaborewellswebsite.vercel.app/",
+    repo: null,
+    image: siteShot("https://telanganaborewellswebsite.vercel.app/"),
+    domain: "telanganaborewellswebsite.vercel.app",
   },
 ];
 

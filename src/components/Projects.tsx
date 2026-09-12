@@ -61,13 +61,14 @@ function ProjectCard({
         </div>
 
         <div className="relative aspect-[16/10] bg-background overflow-hidden">
-          {project.repo ? (
+          {project.image || project.repo ? (
             <Image
-              src={`https://opengraph.githubassets.com/1/${project.repo}`}
+              src={project.image ?? `https://opengraph.githubassets.com/1/${project.repo}`}
               alt={project.title}
               fill
               sizes="(min-width: 768px) 460px, 78vw"
               className="object-cover"
+              unoptimized={project.image?.includes("thum.io") ?? false}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-accent/25 via-surface to-surface">
