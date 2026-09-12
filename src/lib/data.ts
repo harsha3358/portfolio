@@ -163,7 +163,8 @@ export const projects = [
       "Shipped secure live GPS tracking with encrypted data and interactive fleet dashboards, improving fleet management efficiency by 40%.",
     ],
     link: "https://github.com/harsha3358",
-    featured: true,
+    repo: null,
+    domain: "truxlo.app",
   },
   {
     title: "Medical Report Summarization & Clinical NER",
@@ -177,7 +178,8 @@ export const projects = [
       "Exposed the pipeline through API-driven workflows for scalable, real-time report processing.",
     ],
     link: "https://github.com/harsha3358/Medical_Report_Summarizer_with_Clinical_NER",
-    featured: true,
+    repo: "harsha3358/Medical_Report_Summarizer_with_Clinical_NER",
+    domain: "github.com/harsha3358/Medical_Report_Summarizer_with_Clinical_NER",
   },
   {
     title: "GenAI for Hospitals",
@@ -190,21 +192,8 @@ export const projects = [
       "Designed the pipeline around privacy-first handling of sensitive clinical data.",
     ],
     link: "https://github.com/harsha3358/Hospital_gen_ai",
-    featured: true,
-  },
-  {
-    title: "Brain Tumor MRI Classification",
-    period: "Sep 2025",
-    tags: ["CNN", "Deep Learning", "TensorFlow"],
-    description:
-      "A CNN-based deep learning model for multi-class MRI image classification.",
-    points: [
-      "Built a CNN model for multi-class brain tumor MRI classification using TensorFlow and Python.",
-      "Applied image preprocessing, augmentation, and feature extraction to improve generalization and accuracy.",
-      "Evaluated performance using accuracy, precision, recall, F1-score, and confusion matrices.",
-    ],
-    link: "https://github.com/harsha3358",
-    featured: false,
+    repo: "harsha3358/Hospital_gen_ai",
+    domain: "github.com/harsha3358/Hospital_gen_ai",
   },
   {
     title: "Aura — Personal OS for Builders",
@@ -217,7 +206,23 @@ export const projects = [
       "Explored agentic patterns for a system that reasons over personal context rather than static rules.",
     ],
     link: "https://github.com/harsha3358/Aura",
-    featured: false,
+    repo: "harsha3358/Aura",
+    domain: "github.com/harsha3358/Aura",
+  },
+  {
+    title: "Brain Tumor MRI Classification",
+    period: "Sep 2025",
+    tags: ["CNN", "Deep Learning", "TensorFlow"],
+    description:
+      "A CNN-based deep learning model for multi-class MRI image classification.",
+    points: [
+      "Built a CNN model for multi-class brain tumor MRI classification using TensorFlow and Python.",
+      "Applied image preprocessing, augmentation, and feature extraction to improve generalization and accuracy.",
+      "Evaluated model performance using accuracy, precision, recall, F1-score, and confusion matrix metrics.",
+    ],
+    link: "https://github.com/harsha3358",
+    repo: null,
+    domain: "brain-mri.local",
   },
   {
     title: "AutoRubric",
@@ -229,7 +234,8 @@ export const projects = [
       "Built a scoring pipeline that turns a prompt and rubric into structured feedback and insights.",
     ],
     link: "https://github.com/harsha3358/autorubric_aii",
-    featured: false,
+    repo: "harsha3358/autorubric_aii",
+    domain: "github.com/harsha3358/autorubric_aii",
   },
   {
     title: "Image/Video Generation Pipeline",
@@ -241,7 +247,8 @@ export const projects = [
       "Chained prompt-driven generation and animation steps into a single deliverable pipeline.",
     ],
     link: "https://github.com/harsha3358/Image-Video-generation-",
-    featured: false,
+    repo: "harsha3358/Image-Video-generation-",
+    domain: "github.com/harsha3358/Image-Video-generation-",
   },
 ];
 
