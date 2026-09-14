@@ -304,7 +304,7 @@ export const education = [
   {
     school: "Lovely Professional University",
     location: "Phagwara, Punjab",
-    degree: "B.Tech, Computer Science & Engineering (AI & DE) — CGPA 7.47",
+    degree: "B.Tech, Computer Science & Engineering (AI & DE) — CGPA 7.52",
     period: "Aug 2023 — Present",
   },
   {

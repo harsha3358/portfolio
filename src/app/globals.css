@@ -90,19 +90,6 @@ body {
   text-wrap: balance;
 }
 
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-marquee {
-  animation: marquee 32s linear infinite;
-}
-
 body.laptop-intro-active header {
   opacity: 0 !important;
   pointer-events: none;
@@ -249,4 +236,31 @@ body.laptop-intro-active header {
   height: 10px;
   border-radius: 50%;
   display: inline-block;
+}
+
+.jar-glass {
+  border-radius: 20px 20px 32px 32px;
+  background: rgba(7, 7, 10, 0.25);
+  border: 1px solid rgba(244, 242, 236, 0.06);
+  border-bottom: 1.5px solid rgba(244, 242, 236, 0.15);
+  box-shadow:
+    inset 0 1px 0 rgba(244, 242, 236, 0.05),
+    inset 0 -16px 22px -12px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(1px);
+  overflow: hidden;
+}
+
+.jar-highlight {
+  position: absolute;
+  top: 3%;
+  left: 10%;
+  width: 8%;
+  height: 90%;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    rgba(244, 242, 236, 0.1),
+    rgba(244, 242, 236, 0.01)
+  );
+  pointer-events: none;
 }

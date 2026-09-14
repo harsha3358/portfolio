@@ -1,10 +1,9 @@
 import Nav from "@/components/Nav";
 import LaptopIntro from "@/components/laptop/LaptopIntro";
-import Marquee from "@/components/Marquee";
+import SkillsJar from "@/components/SkillsJar";
 import AboutBricks from "@/components/AboutBricks";
 import AboutTerminal from "@/components/AboutTerminal";
 import Projects from "@/components/Projects";
-import Skills from "@/components/Skills";
 import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -15,11 +14,10 @@ export default function Home() {
       <Nav />
       <main>
         <LaptopIntro />
-        <Marquee />
+        <SkillsJar />
         <AboutBricks />
         <AboutTerminal />
         <Projects />
-        <Skills />
         <Experience />
         <Contact />
       </main>

@@ -92,3 +92,24 @@ export function buildTypedHTML(lines: Token[][], visibleChars: number, showCurso
 
   return lineHTML.join("");
 }
+
+export function buildLineTypedHTML(lines: Token[][], visibleLines: number, showCursor: boolean): string {
+  const lineHTML: string[] = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    if (i >= visibleLines) {
+      lineHTML.push("<div>&nbsp;</div>");
+      continue;
+    }
+    const isCursorLine = showCursor && i === visibleLines - 1;
+    let html = lines[i]
+      .map((token) => `<span style="color:${token.color}">${escapeHTML(token.text)}</span>`)
+      .join("");
+    if (isCursorLine) {
+      html += `<span class="typing-cursor">▍</span>`;
+    }
+    lineHTML.push(`<div>${html || (isCursorLine ? "" : "&nbsp;")}</div>`);
+  }
+
+  return lineHTML.join("");
+}

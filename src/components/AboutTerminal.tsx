@@ -3,13 +3,13 @@
 import { useEffect, useMemo, useRef, useState, type WheelEvent } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { buildTypedHTML, CODE_BG, CODE_BG_HEADER, CODE_COLORS, tokenizeSource, totalChars } from "@/lib/codeHighlight";
+import { buildLineTypedHTML, CODE_BG, CODE_BG_HEADER, CODE_COLORS, tokenizeSource } from "@/lib/codeHighlight";
 import { profileCode, profileOutput } from "@/lib/data";
 
 type Phase = "heading" | "typing" | "ready" | "compiling" | "output";
 
-// Cinematic self-typing pace, kept under a ~150 lines/min ceiling.
-const CHARS_PER_SEC = 60;
+// Whole lines snap in one after another rather than a per-character crawl.
+const LINES_PER_SEC = 14;
 
 export default function AboutTerminal() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -22,7 +22,7 @@ export default function AboutTerminal() {
   const [phase, setPhase] = useState<Phase>(initialPhase);
 
   const codeLines = useMemo(() => tokenizeSource(profileCode), []);
-  const codeTotal = useMemo(() => totalChars(codeLines), [codeLines]);
+  const codeLineCount = codeLines.length;
   const outputLines = useMemo(() => tokenizeSource(profileOutput), []);
 
   const goTo = (p: Phase) => {
@@ -33,7 +33,7 @@ export default function AboutTerminal() {
   useEffect(() => {
     if (initialReducedMotion) {
       if (codeInnerRef.current) {
-        codeInnerRef.current.innerHTML = buildTypedHTML(codeLines, codeTotal, false);
+        codeInnerRef.current.innerHTML = buildLineTypedHTML(codeLines, codeLineCount, false);
       }
       return;
     }
@@ -50,11 +50,11 @@ export default function AboutTerminal() {
       const start = performance.now();
       const tick = (now: number) => {
         const elapsed = (now - start) / 1000;
-        const visible = Math.min(codeTotal, Math.floor(elapsed * CHARS_PER_SEC));
+        const visible = Math.min(codeLineCount, Math.floor(elapsed * LINES_PER_SEC) + 1);
         if (codeInnerRef.current) {
-          codeInnerRef.current.innerHTML = buildTypedHTML(codeLines, visible, visible < codeTotal);
+          codeInnerRef.current.innerHTML = buildLineTypedHTML(codeLines, visible, visible < codeLineCount);
         }
-        if (visible >= codeTotal) {
+        if (visible >= codeLineCount) {
           goTo("ready");
           return;
         }
@@ -86,7 +86,7 @@ export default function AboutTerminal() {
       trigger.kill();
       if (rafId.current) cancelAnimationFrame(rafId.current);
     };
-  }, [codeLines, codeTotal, initialReducedMotion]);
+  }, [codeLines, codeLineCount, initialReducedMotion]);
 
   const handleInnerWheel = (e: WheelEvent<HTMLElement>) => {
     const el = e.currentTarget;
